@@ -1,9 +1,9 @@
-#Python for Accessing Census Demographic Data Online
-##An introduction to the use of Python to query Census data through the API in order to faciliate easier access and use of Census data for analysis.
+# Python for Accessing Census Demographic Data Online
+## An introduction to the use of Python to query Census data through the API in order to faciliate easier access and use of Census data for analysis.
 
-![img](../images/python_outline.jpg)
+![img](images/python_outline.jpg)
 
-#Goals
+# Goals
 + Describe the basic syntax and usage of Python 3 for data analysis
 + Introduce key packages for Python to perform data analysis, including [pandas](http://pandas.pydata.org/), [requests](http://docs.python-requests.org/en/master/), and the [census](https://github.com/sunlightlabs/census)
 + Introduce application programming interfaces (APIs) and their use in data analysis
@@ -13,13 +13,13 @@
 + Discuss key needs for a Census API wrapper to support the work of the GovEx team
 + Provide key resources for setting up Python and learning data analysis in Python 
 
-#Key Outcomes
+# Key Outcomes
 + You will be familiar with basic syntax, data structures, and commonly used packages for data analysis in Python 3
 + You will be familiar with application programming interfaces (APIs) and how to work with them using Python
 + You will be familiar with the Census API for accessing ACS data with Python
 + You will be familiar with key resources to help further your understanding of Python for data analysis
 
-#Outline
+# Outline
 + Getting started (10:00 - 10:50)
     + Python overview
     + Python 3 syntax
