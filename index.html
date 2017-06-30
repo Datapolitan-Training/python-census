@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Python for Census Data Analysis</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../slide.css"/>
+  </head>
+  <body>
+    <textarea id="source">
+
+layout:true
+
+<p class="footer">
+<span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Python for Census Data Analysis</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://www.datapolitan.com" property="cc:attributionName" rel="cc:attributionURL">Richard Dunks</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative-Commons-License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a>
+</p>
+
+---
+
+class:center,middle
+
+<!-- ![img-center-70](images/wwc_govex_logo.png) -->
+# Python for Census Data Analysis
+
+- - - 
+
+## Richard Dunks
+### Follow along at: http://bit.ly/govex-python
+
+![img-center-40](images/datapolitan.png)
+
+---
+
+# Goals
+--
+
++ Introduce application programming interfaces (APIs) and their use in data analysis
+--
+
++ Discuss the various products released by the US Census Bureau and how to use them in analysis, with particularly focus on the [American Community Survey](https://www.census.gov/programs-surveys/acs/) 
+--
+
++ Introduce the [Census APIs](http://www.census.gov/data/developers/data-sets.html) and practice accessing ACS data via the API to perform simple analysis
+--
+
++ Practice using the Census APIs to reproduce the affordability index methodology in Python
+--
+
++ Provide key resources for setting up Python and learning data analysis in Python 
+
+---
+
+# Key Outcomes
+--
+
++ You will be familiar with basic syntax, data structures, and commonly used packages for data analysis in Python
+--
+
++ You will be familiar with application programming interfaces (APIs) and how to work with them using Python
+--
+
++ You will be familiar with the Census API for accessing ACS data with Python
+--
+
++ You will be familiar with key resources to help further your understanding of Python for data analysis
+
+---
+
+# Getting Started - Download a text editor
++ [Sublime Text](https://www.sublimetext.com/3)
++ [Atom](https://atom.io/)
++ [Notepad++](https://notepad-plus-plus.org/download/v6.9.2.html) (if you're on Windows)
+
+---
+
+# Getting Started - Download Python
++ https://www.continuum.io/downloads
++ Select Python 3.5 ([it's the right thing to do](https://pythonclock.org/))
+
+---
+
+# Introduction to APIs
+--
+
++ Application Program Interface (API)
+--
+
++ A tool for making a website's data digestible for a computer
+
+---
+
+# API Steps
+--
+
++ Make a request
+--
+
++ Get a response
+--
+
+## &nbsp;
+
+![img-center-100](images/api1.png)
+
+---
+
+# API Request
+--
+
++ Endpoint: http://endpoint.api.com/search?
+--
+
++ Query terms: query=search_term
+--
+
++ Authentication: client_id=123, client_secret=abc
+--
+
+
+# Put it all together for the request
+--
+
++ http://endpoint.api.com/search?query=search_term&client_id=123&client_secret=abc
+
+---
+
+# API Response
+--
+
+![img-center-90](images/api2.png)
+--
+
+![img-center-60](images/api3.png)
+--
+
+### This is JSON (**J**ava**S**cript **O**bject **N**otation)
+
+---
+
+# Foursquare API Request
+![img-center-80](images/4s_api1.png)
+
+---
+
+# Foursquare API Request
+![img-center-80](images/4s_api2.png)
+
+--
+
+### Endpoint
+--
+
++ `https://api.foursquare.com/v2/venues/search?`
+
+---
+
+# Foursquare API Request
+![img-center-80](images/4s_api3.png)
+--
+
+### Query Parameters
+--
+
++ `ll=40.7037253789768,-74.0079939173954`
+--
+
++ `radius=100`
+--
+
++ `limit=50`
+
+---
+
+# Foursquare API Request
+![img-center-80](images/4s_api4.png)
+
+---
+
+# Foursquare API Request
+![img-center-80](images/4s_api4.png)
+
+### Authentication (optional in some cases)
+--
+
++ `client_id=TQTH2POSXDUDYOHKHXM0VKDRCBSSYAFUWMVSWBCI10URJBTR`
+--
+
++ `client_secret=F3TEHU5APOLSMLSJZYZYUV1SOL5V0V2HUS150YXGTXFPINGS`
+--
+
++ `v=20140609`
+
+---
+
+# API Response
+![img](images/4s_api_resp.png)
+
+---
+
+class:center,middle
+# Questions?
+<!-- ![img](images/Batman-and-Robin-Running_meme.png)
+### https://developer.foursquare.com/docs/venues/search 
+ -->
+---
+
+# Let's do this
++ We're going to query [NYC's 311 portal](https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9) for a day's worth of noise complaints
++ Figure out the endpoint, query parameters, and quirks of the [SoDA API](https://dev.socrata.com/consumers/getting-started.html)
++ Write the API request in your text editor and test in your browser until you get the output you want
+
+---
+
+class:center,middle
+# 10 Min Break
+<!-- 10:50 - 11:00 -->
+![img-center-30](http://imgs.xkcd.com/comics/api.png)
+Source: http://xkcd.com/1481/
+
+---
+
+class:center,middle
+# Introduction to [Python](#118)
+![img-center-90](images/python_dev.jpg)
+
+---
+
+# Python facts
+--
+
++ Comes from Monty Python and Flying Circus
+--
+
++ Very flexible and highly readable
+--
+
++ Can work on the commandline and in scripts
+--
+
++ But we're going to use a [Notebook](http://jupyter.org/)
+
+---
+
+# Do this
++ Open Anaconda and start a notebook
++ Let's learn some Python
+
+---
+
+# Important packages
++ [`requests`](http://docs.python-requests.org/en/master/)
++ [`pandas`](http://pandas.pydata.org/)
+
+---
+
+class:center,middle
+# 10 Min Break
+<!-- 11:50 - 12:00 -->
+![img-center-50](http://imgs.xkcd.com/comics/python.png)
+Source: http://xkcd.com/353/
+
+---
+
+class:center,middle
+![img-center-90](images/census_logo3.jpg)
+# Let's talk about the Census
+
+---
+
+class:center,middle
+# Some Important Ideas
+
+---
+
+# Census vs Survey
+--
+
++ A census is a full accounting for every person
+--
+
++ A survey is a sampling of the population
+--
+
++ A full census is expensive and difficult 
+--
+
++ A survey is less expensive but resulting estimates will have some inaccuracies 
+
+---
+
+# Adminstrative areas
+--
+
++ Delineated by OMB
+--
+
++ Generally follow administrative boundaries
+--
+
++ Core-based statistical areas (CBSAs) are statistical agglomerations based on the movement of people within any given area (Metropolitan Statistical Areas)
+
+---
+
+# Adminstrative areas
+![img-center-70](images/censusgeo.png)
+
+---
+
+# A note on ZIP Code Tabulation Areas
++ ZIP Codes and ZCTAs aren't the same thing
+[![img-center-50](http://www.unitedstateszipcodes.org/images/city-block.png)](http://www.unitedstateszipcodes.org/)
++ .red[Google ZIP codes aren't ZCTAs]
+
+---
+
+# We're going to be focusing on [Places](https://en.wikipedia.org/wiki/Place_%28United_States_Census_Bureau%29)
+
+--
+
++ Can be Incorporated Places (cities) or unincorporated Census Designated Places
+--
+
++ Hawaii and Puerto Rico have no incorporated places
+
+---
+
+#[Decennial Census of Population and Housing](http://www.census.gov/programs-surveys/decennial-census.html)
+--
+
++ Constitutionally mandated every 10 years
+--
+
+<blockquote class="small">The actual enumeration shall be made within three years after the first meeting of the Congress of the United States, and within every subsequent term of 10 years, in such manner as they shall by law direct."<br>- The Constitution of the United States, Article I, Section 2</blockquote>
+---
+
+# [Decennial Census of Population and Housing](http://www.census.gov/programs-surveys/decennial-census.html)
++ In 2010 only the short form was administered
+--
+
++ Contains age, gender, race, ethnicity, and household status
+
+---
+
+# The American Community Survey
+--
+
++ Sample of the population conducted on an ongoing basis
+--
+
++ Replaced the long-form of the census
+--
+
++ Responses are gathered over a period of time
+--
+
++ 1-year estimates are for nation, state, and large metropolitan areas
+--
+
++ 5-year estimates go down to the block level but are only really accurate for census tracts
+--
+
++ Generally don't want to compare over-lapping 5-year estimates
+
+---
+
+# The American Community Survey
++ Contains detailed ethnic origin, immigration status, income, employment, travel to work, housing status, household composition, and cross tabulations of these values
+--
+
++ Stored in sequence files of up to 256 values
+--
+
++ One set of files for the estimates
+--
+
++ One set of files for the margins of error
+
+---
+
+# Other Census products of note
+--
+
++ [American Housing Survey](http://www.census.gov/programs-surveys/ahs.html)
+--
+
++ [Current Population Survey](http://www.census.gov/programs-surveys/cps.html)
+--
+
++ [Economic Census](http://www.census.gov/econ/census/)
+--
+
++ [Housing Vacancy Survey](http://www.census.gov/programs-surveys/hvs.html)
+--
+
++ [Population Estimates](http://www.census.gov/programs-surveys/popest.html)
+--
+
++ [Population Projections](http://www.census.gov/programs-surveys/popproj.html)
+
+---
+
+# Other Census products of note
+--
+
++ [Census of Governments](http://www.census.gov/govs/cog/)
+--
+
++ [Annual Survey of Public Employment and Payroll](http://www.census.gov/govs/apes/)
+--
+
++ [State and Local Government Finance Snapshot](http://www.census.gov/govs/local/)
+--
+
++ [Quarterly Summary of State and Local Government Tax Revenue](http://www.census.gov/govs/qtax/)
+--
+
++ [Government Integrated Directory](http://www.census.gov/govs/www/gid2007.html)
+
+---
+
+class:center,middle
+# Data Structure
+
+---
+
+# Universe
+--
+
+![img-center-80](images/universe.png)
+--
+
++ Think of this like the denominator
+--
+
++ Important when generating percentages (make sure you're comparing numbers in the right universe)
+
+---
+
+# Key metrics from the affordability index
++ Homeowner Vacancy Rate
++ Rental Vacancy Rate
++ Owner-Occupied
++ Renter-Occupied
++ Median Home Value
++ Median Mortgage Cost
++ Median Rent
+
+---
+
+# Key metrics from the affordability index
++ Owners paying >=30% of Income in Housing Costs
++ Renters paying >=30% of Income in Housing Costs
++ Unemployment Rate
++ Median Household Income
++ Mean Income
++ Total Population
++ Non-White
+
+---
+
+# Homeowner Vacancy Rate
+> The homeowner vacancy rate is the proportion of the homeowner housing inventory which is vacant for sale.  It is computed by dividing the number of vacant units for sale only by the sum of owner-occupied units and vacant units that are for sale only, and then multiplying by 100.
+
+Source: [Census](https://ask.census.gov/faq.php?id=5000&faqId=6629)
+
+---
+
+# Rental Vacancy Rate
+> The proportion of the rental inventory which is vacant for rent.  It is computed by dividing the number of vacant units for rent by the sum of the renter‑occupied units and the number of vacant units for rent, and then multiplying by 100.
+
+Source: [Census](https://ask.census.gov/faq.php?id=5000&faqId=7019)
+
+---
+
+# Contract Rent
+> The monthly rent agreed to or contracted for, regardless of any furnishings, utilities, fees, meals, or services that may be included. For vacant units, it is the monthly rent asked for the rental unit at the time of interview.
+
+Source: [Census](https://ask.census.gov/faq.php?id=5000&faqId=6525)
+
+---
+
+# Gross Rent
+> The amount of the contract rent plus the estimated average monthly cost of utilities (electricity, gas, and water and sewer) and fuels (oil, coal, kerosene, wood, etc.) if these are paid for by the renter (or paid for the renter by someone else). Gross rent is intended to eliminate differentials which result from varying practices with respect to the inclusion of utilities and fuels as part of the rental payment.
+
+Source: [Census](https://ask.census.gov/faq.php?id=5000&faqId=6613)
+
+---
+
+# Monthly Housing Costs as a % of Income
+> The data for monthly housing costs as a percentage of household income are developed from a distribution of “Selected Monthly Owner Costs as a Percentage of Household Income” for owner-occupied and “Gross Rent as a Percentage of Household Income” for renter-occupied units.
+
+Source: [Census](https://ask.census.gov/faq.php?id=5000&faqId=6823)
+
+---
+
+# Aggregates
+> The sum of the values for each of the elements in the universe.  For example, aggregate household income is the sum of the income of all households in a given geographic area.  Aggregates are frequently used in computing mean values (mean equals aggregate divided by universe count).
+
+Source: [Census](https://ask.census.gov/faq.php?id=5000&faqId=6183)
+
+---
+
+# Task
++ Working in groups or alone, we're going to build a function for each of the metrics in the affordability index using the [ACS API](http://www.census.gov/data/developers/data-sets/acs-survey-5-year-data.html)
++ The function is going to take in the [state FIPs and place name](data/WWC_fips_list.xlsx) for a city and output the metric
++ Use the [reference sheet](https://docs.google.com/spreadsheets/d/1aKTU5SW5tbZ-s6wwxjONN-sOvM5l0VY7B-HgDC79I4U/edit?usp=sharing) to find the ACS variables
+
+```python
+import requests
+url = 'http://api.census.gov/data/2013/acs5?get='
+api_key = '6122df17856235fccc7ce6a0b92b9dc8b13bddcd'
+
+# Example of query for Adak city, Alaska
+# http://api.census.gov/data/2014/acs5?get=NAME,B01001_001E&for=place:00065&in=state:02
+
+```
+---
+
+class:center,middle
+# A guide to Python
+
+---
+
+class:middle,center
+# Data structures
+
+---
+
+# What is a data structure?
+--
+
++ A way of organizing data in a computer program
+--
+
++ The method of organizing data differs across types, allowing for different applications
+--
+
++ Important to use the right data structure for the proper task
+
+---
+
+# Algorithms and Data Structures
+![img-center-90](images/algo_ds.png)
+
+---
+
+class:center,middle
+# Data structures in Python
+## How many can you name?
+
+---
+
+# Lists
+--
+
++ The most versatile data structure in Python
+--
+
++ Can contain multiple data types
+--
+
++ Can be sliced or added to
+--
+
++ Are mutable (can be changed)
+--
+
++ Access individual items by index
+
+--
+
+![img-center-40](images/list1.png)
+
+---
+
+# List functions
+--
+
++ append(_object_) - add object to list
+--
+
++ extend(_list_) - extend original list with elements of specified in list
+--
+
++ insert(_index, object_) - insert object at specified index
+--
+
++ pop(_[index]_) - pop element from list at index and return (default to last value in list)
+--
+
++ remove(_value_) - delete first occurrence of value from list (no return)
+
+---
+
+# List functions
++ reverse - reverse the order of the list in place
+--
+
++ sort() - sort the list
+--
+
++ count(_value_) - count number of occurrences of value
+--
+
++ index(_value_) - find index of first value and return 
+
+--
+
+## For more information, see [the documentation ](https://docs.python.org/2/library/functions.html#list)
+
+---
+
+# When to use a list
+--
+
++ When order matters
+--
+
++ When you can look up the value using a simple numerical index
+--
+
++ When your data might be changed, removed, or extended
+--
+
++ When your data doesn’t need to be unique
+
+---
+
+# Sets
+--
+
++ An unordered collection with no duplicate values
+--
+
++ Created using the keyword “set”
+--
+
++ More limited in the types of objects that can be included (stick with basic types)
+--
+
++ Think of it like a bag of things you toss values into without needing to get them out in any order
+
+--
+
+```python
+s = set("lede algorithms")
+print(s)
+{'m', 'o', 'i', 'd', 'r', 's', 'z', 'a', 'g', 'l', ' ', 'e', 't', 'h'}
+```
+
+---
+
+# When to use sets
+--
+
++ When you only need unique values
+--
+
++ When the data types you’re working with are relatively basic (hashable)
+--
+
++ When your data changes
+--
+
++ When you need to manipulate your sets mathematically (set supports operations like union, intersection, difference, etc)
+
+---
+
+# Set example
+```python
+s = set("lede algorithms")
+print(s)
+{'m', 'o', 'i', 'd', 'r', 's', 'z', 'a', 'g', 'l', ' ', 'e', 't', 'h'}
+
+c = set("columbia")
+print(c)
+{'a', 'b', 'c', 'i', 'l', 'm', 'o', 'u'}
+
+print(c - s)
+{'c', 'b', 'u'}
+```
+
+---
+
+# Set functions
+--
+
++ `add(value)` - adds value to set
+--
+
++ `remove(value)` - removes the value; if not present raises key error
+--
+
++ `discard(value)` - discards the value if present in the set
+--
+
++ `pop()` - removes an arbitrary set element
+--
+
++ use `for` loop to access all the elements (can't index)
+
+---
+
+# Tuples
+--
+
++ Immutable (unchangable) data structure similar to a list
+--
+
++ Can contain elements of different types (don’t need to be hashable)
+
+--
+
+![img-center-60](images/tuple1.png)
+
+---
+
+# When to use tuples
+--
+
++ When your data doesn’t change
+--
+
++ When performance is important (tuples provide better performance because of their immutability)
+
+---
+
+# Dictionaries
+--
+
++ Stores data in key-value pairs
+--
+
++ Provides lookup based on custom keys (instead of numerical indexes)
+--
+
++ Keys must be unique
+
+--
+
+![img-center-100](images/dict1.png)
+
+---
+
+# When to use a dictionary
+--
+
++ When you need to lookup values by a custom key
+--
+
++ When you need a fast way to lookup values
+--
+
++ When your data needs to be modified
+
+---
+
+# Things to remember with a dictionary
+--
+
++ Key-value pairs aren’t stored in order (use `collections.OrderedDict` if you need to key order is important)
+--
+
++ `collections.defaultdict` is a more flexible implementation for creating a dictionary and adding values
+
+--
+
+## For more information, [check this out](http://code.tutsplus.com/articles/advanced-python-data-structures--net-32748)
+
+---
+
+# Control Statements
+--
+
++ Manages order of program operation
+--
+
++ Helps program make a decision based on conditions
+--
+
++ Any computable operation can be replicated with a mix of three control statements (sequence, selection, and iteration)
+
+---
+
+# Sequence
+--
+
++ The order of functions in a program
+--
+
++ Most basic form of control flow
+--
+
++ Basically the thing you've been doing this whole time
+
+---
+
+# Conditional statement (selection)
+--
+
++ Code block only executes if some logical test is met
+--
+
++ Logical test can be as simple or complex as necessary
+--
+
++ Uses [Boolean logic](http://learnpythonthehardway.org/book/ex28.html)
+
+---
+
+# Conditional statement in Python (selection)
+
++ `if <logical test>:` code executes only if the logical test is `True` 
+--
+
++ `elif <logical test>:` tests for an additional condition (can have an unlimited number)
+--
+
++ `else:` optional default if none of the other tests are true
+--
+
+```python
+temp = 70
+if temp < 30:
+        print("It's really cold!")
+elif temp < 65:
+        print("It's cold!")
+elif temp > 100:
+        print("It's really hot")
+elif temp > 85:
+        print("It's hot!")
+else:
+        print("The temperature is fine")
+```
+---
+
+# Conditional statement in Python (selection)
++ Notice the execution of the `if`, `elif`, `else` is going to stop once a condition is met and the sequence will continue
+```python
+temp = 25
+if temp < 30:
+        print("It's really cold!")
+elif temp < 65:
+        print("It's cold!")
+elif temp > 100:
+        print("It's really hot")
+elif temp > 85:
+        print("It's hot!")
+else:
+        print("The temperature is fine")
+```
+
+---
+
+# Conditional statement in Python (selection)
++ This will have a very different result
+```python
+temp = 25
+if temp < 30:
+        print("It's really cold!")
+if temp < 65:
+        print("It's cold!")
+if temp > 100:
+        print("It's really hot")
+if temp > 85:
+        print("It's hot!")
+else:
+        print("The temperature is fine")
+```
+
+---
+
+# For Loops (iteration)
+--
+
++ Loops through a set sequence of values
+--
+
++ Assign a temporary variable that takes on the element from the sequence
+--
+
++ Temporary variable used within the body of the loop
+--
+
++ Temporary variable is reassigned with next value from sequence
+--
+
+```python
+words = ['cat', 'window', 'defenestrate']
+for w in words:
+        print(w)
+```
+
+---
+
+# While Loops (iteration)
++ Loops until a guard condition is met
+--
+
+```python
+n = 0
+while n < 5:
+        n += 1
+print(n)
+```
+--
+
++ What happens if I forgot the `n += 1`?
+--
+
+![img-center-70](http://i.giphy.com/HPASxeEylfHA4.gif)
+
+---
+
+# While Loops (iteration)
++ Use when the number of iterations is unknown
+--
+
++ Helps ensure a condition or variable state is achieved before moving on with code execution
+
+---
+
+# Functions
+--
+
++ Block of organized, reusable code
+--
+
++ Ideally perform a single action
+--
+
++ Make your code more modular
+
+---
+
+# When do I write a function?
+--
+
++ If you find yourself repeating the same code sequence, it’s time to write a function
+--
+
++ [**D**on’t **R**epeat **Y**ourself (DRY)](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)
+--
+
++ Helps make your code more readable and easier to maintain
+
+---
+
+# Function Example
++ Try this
+
+```python
+def add(x,y):
+  return x + y
+```
+
+--
+
+![img-center-70](images/add_algo0.png)
+
+---
+
+# Function Elements
+![img-center-70](images/add_algo1.png)
+
+--
+
+![img-center-70](images/add_algo2.png)
+
+---
+
+# Function Elements
+![img-center-70](images/add_algo1.png)
+
+![img-center-70](images/add_algo3.png)
+
+---
+
+# Function Elements
+![img-center-70](images/add_algo1.png)
+
+![img-center-70](images/add_algo4.png)
+
+---
+
+# Function Elements
+![img-center-70](images/add_algo1.png)
+
+![img-center-70](images/add_algo5.png)
+
+---
+
+# Function Elements
+![img-center-70](images/add_algo1.png)
+
+![img-center-70](images/add_algo6.png)
+
+---
+
+# Function Elements
+![img-center-70](images/add_algo1.png)
+
+![img-center-70](images/add_algo7.png)
+
+---
+
+# Thank You
++ [richard@datapolitan.com](mailto:richard@datapolitan.com)
++ http://blog.datapolitan.com
++ [@rdunks1](https://twitter.com/rdunks1)/[@datapolitan](https://twitter.com/Datapolitan)
+
+
+
+   </textarea>
+    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create(
+      // {
+      //   slideNumberFormat: ""}
+        );
+    </script>
+  </body>
+</html>
